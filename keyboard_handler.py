@@ -1,5 +1,6 @@
-from pynput import keyboard
 import unittest
+
+from pynput import keyboard
 
 
 class KeyboardHandler:
@@ -32,10 +33,10 @@ class KeyboardHandler:
             key = self.get_key(event)
 
             if self.COMBINATION_KEY in key:
-                key = self.SHORTCUT_KEY + '+' + self._char_from_num(key)
+                key = self.SHORTCUT_KEY + "+" + self._char_from_num(key)
 
             elif key == self.CTRL_M:
-                key = self.SHORTCUT_KEY + '+' + 'm'
+                key = self.SHORTCUT_KEY + "+" + "m"
 
             return key
 
