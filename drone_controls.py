@@ -24,7 +24,24 @@ class DroneControls:
             "PITCH_DECR": self.pitch.decrease,
             "ROLL_INCR": self.roll.increase,
             "ROLL_DECR": self.roll.decrease,
+            "RESET": self.reset
         }
 
-    def get_outcome(self, inp):
-        self.outcomes.get(inp, lambda: "Invalid Input")()
+    def get_values(self):
+        values = {
+            "THROTTLE": self.throttle.get_value(),
+            "YAW": self.yaw.get_value(),
+            "PITCH": self.pitch.get_value(),
+            "ROLL": self.roll.get_value(),
+        }
+
+        return values
+
+    def get_outcome(self, action):
+        self.outcomes.get(action)()
+
+    def reset(self):
+        self.throttle.reset_value()
+        self.yaw.reset_value()
+        self.pitch.reset_value()
+        self.roll.reset_value()
