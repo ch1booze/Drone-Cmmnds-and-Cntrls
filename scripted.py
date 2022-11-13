@@ -1,19 +1,9 @@
-import os
 from pathlib import Path
-
-def folder_exists(folder_path):
-    if os.path.exists(folder_path):
-        return True
-
-    return False
+from utils import list_files, create_folder
 
 
-def create_folder(folder_path):
-    os.makedirs(folder_path)
-
-
-class Scripted:
-    SCRIPTING_ROOT_PATH = Path("scripted_files") 
+class Scripter:
+    SCRIPTING_ROOT_PATH = Path("scriptings")
     ACTIONS = [
         "THROTTLE_INCR",
         "THROTTLE_DECR",
@@ -37,41 +27,35 @@ class Scripted:
             contents = f.read("file")
 
         return contents
-    def list_script(self):
-        dir_list = os.listdir(self.SCRIPTING_ROOT_PATH)
-        script = list(enumerate([f for f in dir_list]))
-        return script
 
+    def list_scripts(self):
+        return list_files(self.SCRIPTING_ROOT_PATH)
 
-    def prewritten_input(self):
-        script = [ ]
+    def check_default_path(self):
+        create_folder(self.SCRIPTING_ROOT_PATH)
+
+    def prewritten_script_input(self):
+        script = []
         actions = list(enumerate([f for f in self.ACTIONS]))
         print(actions)
 
         while True:
-            action = int(input("Enter NUMBER: "))
-
-            # If action is "q", break
+            action = int(input("Enter number(associated with action): "))
             if action == "q":
                 break
 
             line = self.ACTIONS[action]
-    
-            
-            # Collect intensity value i.e. how much should the action change by as a string
             intensity = input("ENTER INTENSITY: ")
-            # Concatenate intensity value with line
             line += " " + intensity
-            # Add line to script
+
             script.append(line)
+        script = [line + "\n" for line in script]
+
         return script
-    def prewritten_write (self):
-        script = self.prewritten_input()
-        lines = [line + "\n" for line in script]
+
+    def prewritten_script_writer(self):
+        script = self.prewritten_script_input()
         print(self.list_script())
-        filename =  input("ENTER FILE NAME: ")
-        self.write_file(filename, lines)
+        filename = input("Enter filename: ")
 
-
-
-            
+        self.write_file(filename, script)
