@@ -2,10 +2,7 @@ import json
 import os
 from pathlib import Path
 
-
-def reverse_mapping(dictionary):
-    reversed_dict = dict([(v, k) for k, v in dictionary.items()])
-    return reversed_dict
+from utils import reverse_mapping
 
 
 class KeyboardMapping:
@@ -18,7 +15,8 @@ class KeyboardMapping:
         "i": "PITCH_INCR",
         "k": "PITCH_DECR",
         "j": "ROLL_DECR",
-        "l": "ROLL_INCR"
+        "l": "ROLL_INCR",
+        "reset": "RESET"
     }
 
     def __init__(self) -> None:
@@ -34,20 +32,22 @@ class KeyboardMapping:
     def get_mapping(self):
         list_of_mappings = self.list_mappings()
 
-        print(list_of_mappings)
         if len(list_of_mappings) == 1:
-            mappings = self.read_mapping(list_of_mappings[0])
+            mappings = self.read_mapping(list_of_mappings[0][1])
+
         else:
+            print(list_of_mappings)
+
             map_number = int(input("Enter mapping number: "))
-            mappings = self.read_mapping(list_of_mappings[map_number])
+            mappings = self.read_mapping(list_of_mappings[map_number][1])
 
         return mappings
 
     def set_mapping(self):
         commands = reverse_mapping(self.mappings)
-        print(self.mappings)
 
         while True:
+            print(self.mappings)
             old_letter = input(
                 "Enter letter for command already mapped to (1 to quit): "
             ).lower()
@@ -69,19 +69,17 @@ class KeyboardMapping:
 
         return mapping
 
-    def write_mapping(self, filename=None):
-        list_of_mappings = self.list_mappings()
-        print(list_of_mappings)
+    def write_mapping(self, filename="default"):
+        map_path = self.MAPPING_ROOT_PATH / (filename + ".json")
 
-        if filename:
-            map_path = self.MAPPING_ROOT_PATH / (filename + ".json")
-        else:
-            map_path = self.MAPPING_ROOT_PATH / ("default.json")
-
-        with open(map_path, "r") as json_file:
+        with open(map_path, "w") as json_file:
             json.dump(self.mapping, json_file)
 
     def check_default_mappings(self):
         if not os.path.isdir(self.MAPPING_ROOT_PATH):
             os.makedirs(self.MAPPING_ROOT_PATH)
-            self.write_mapping(self.DEFAULT_MAPPING)
+            self.mapping = self.DEFAULT_MAPPING
+            self.write_mapping()
+
+    def get_action(self, key):
+        return self.mapping.get(key)

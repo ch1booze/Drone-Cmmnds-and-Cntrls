@@ -8,6 +8,7 @@ class KeyboardHandler:
     CTRL_M = "\\r"
     SHORTCUT_KEY = "ctrl"
     PRESS = keyboard.Events.Press
+    RELEASE = keyboard.Events.Release
 
     def get_key(self, event):
         key_string = str(event.key)
@@ -39,6 +40,9 @@ class KeyboardHandler:
                 key = self.SHORTCUT_KEY + "+" + "m"
 
             return key
+
+        elif type(event) == self.RELEASE:
+            return "reset"
 
 
 class TestKeyboardHandler(unittest.TestCase):
