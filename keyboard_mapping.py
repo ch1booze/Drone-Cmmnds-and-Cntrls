@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-from utils import reverse_mapping
+from utils import reverse_mapping, list_files
 
 
 class KeyboardMapping:
@@ -24,22 +24,19 @@ class KeyboardMapping:
         self.mapping = self.get_mapping()
 
     def list_mappings(self):
-        dir_list = os.listdir(self.MAPPING_ROOT_PATH)
-        mappings = list(enumerate([f for f in dir_list]))
-
-        return mappings
+        return list_files(self.MAPPING_ROOT_PATH)
 
     def get_mapping(self):
         list_of_mappings = self.list_mappings()
 
         if len(list_of_mappings) == 1:
-            mappings = self.read_mapping(list_of_mappings[0][1])
+            mappings = self.read_mapping(list_of_mappings[0])
 
         else:
             print(list_of_mappings)
 
             map_number = int(input("Enter mapping number: "))
-            mappings = self.read_mapping(list_of_mappings[map_number][1])
+            mappings = self.read_mapping(list_of_mappings[map_number])
 
         return mappings
 
