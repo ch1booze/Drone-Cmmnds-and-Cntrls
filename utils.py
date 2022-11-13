@@ -1,5 +1,5 @@
 import os
-
+import pprint
 
 def reverse_mapping(dictionary):
     reversed_dict = dict([(v, k) for k, v in dictionary.items()])
@@ -17,3 +17,9 @@ def list_files(folder_path):
     filenames = {k: dir_list[k] for k in range(num_of_files)}
 
     return filenames
+
+
+def printer(obj):
+    print()
+    pprint.pp(obj)
+    print()

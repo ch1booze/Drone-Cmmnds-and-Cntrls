@@ -9,15 +9,15 @@ mppng = KeyboardMapping()  # maps relevant keyboard input to respective command
 cntrls = DroneControls()  # controls joystick movements
 
 while True:
-    event = inptter.get_event() # check whether a key is being pressed or released
-    key = hndlr.handler(event) #
+    event = inptter.get_event() # check whether a event is a key press or release
+    key = hndlr.handler(event) # returns key or key combo
     print(f"Key: {key}")
 
     if key == "q":
         break
 
     if key:
-        action = mppng.get_action(key)
+        action = mppng.get_action(key) 
         print(f"Action: {action}")
         if action:
             outcome = cntrls.get_outcome(action)
