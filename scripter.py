@@ -70,9 +70,11 @@ class Scripter:
         scripts = self.list_scripts()
         if scripts:
             printer(scripts)
-            script_num = int(input("Enter script number: "))
-            contents = self.read_file(scripts[script_num])
-            contents = contents.splitlines()
+            script_num = int(input("Enter script number (number not in list to quit): "))
+            script = scripts.get(script_num, None)
+            if script:
+                contents = self.read_file()
+                contents = contents.splitlines()
 
         else:
             print("No scripts available")
