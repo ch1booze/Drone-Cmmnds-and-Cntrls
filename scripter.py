@@ -73,7 +73,7 @@ class Scripter:
             script_num = int(input("Enter script number (number not in list to quit): "))
             script = scripts.get(script_num, None)
             if script:
-                contents = self.read_file()
+                contents = self.read_file(script)
                 contents = contents.splitlines()
 
         else:

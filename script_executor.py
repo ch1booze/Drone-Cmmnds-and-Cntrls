@@ -12,7 +12,8 @@ class ScriptExecutor:
             action, intensity = command.split(" ")
             for _ in range(int(intensity)):
                 self.cntrls.get_outcome(action)
-                time.sleep(0.3)
+                time.sleep(0.01)
 
             print(f"Values: {self.cntrls.get_values()})")
             self.cntrls.reset()
+            print(f"Values: {self.cntrls.get_values()})")
