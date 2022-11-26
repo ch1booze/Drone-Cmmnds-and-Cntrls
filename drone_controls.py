@@ -38,7 +38,8 @@ class DroneControls:
         return values
 
     def get_outcome(self, action):
-        self.outcomes.get(action)()
+        if action:
+            self.outcomes.get(action)()
 
     def reset(self):
         self.throttle.reset_value()

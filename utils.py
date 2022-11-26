@@ -18,6 +18,14 @@ def list_files(folder_path):
 
     return filenames
 
+def string_stripper(string, strip_list):
+    stripped_str = string
+    for s in strip_list:
+        stripped_str = stripped_str.replace(s, '')
+
+    return stripped_str
+
+
 
 def printer(obj):
     print()
