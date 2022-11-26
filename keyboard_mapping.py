@@ -21,30 +21,33 @@ class KeyboardMapping:
 
     def __init__(self) -> None:
         self.check_default_mappings()
-        self.mapping = self.get_mapping()
+        self.mapping = self.get_mapping_from_file()
 
     def list_mappings(self):
         return list_files(self.MAPPING_ROOT_PATH)
 
     def get_mapping(self):
+        return self.mapping
+
+    def get_mapping_from_file(self):
         list_of_mappings = self.list_mappings()
 
         if len(list_of_mappings) == 1:
-            mappings = self.read_mapping(list_of_mappings[0])
+            mapping = self.read_mapping(list_of_mappings[0])
 
         else:
             print(list_of_mappings)
 
             map_number = int(input("Enter mapping number: "))
-            mappings = self.read_mapping(list_of_mappings[map_number])
+            mapping = self.read_mapping(list_of_mappings[map_number])
 
-        return mappings
+        return mapping
 
     def set_mapping(self):
         commands = reverse_mapping(self.mappings)
 
         while True:
-            print(self.mappings)
+            print(self.mapping)
             old_letter = input(
                 "Enter letter for command already mapped to (1 to quit): "
             ).lower()
