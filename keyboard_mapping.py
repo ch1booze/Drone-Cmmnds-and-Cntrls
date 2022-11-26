@@ -16,7 +16,6 @@ class KeyboardMapping:
         "k": "PITCH_DECR",
         "j": "ROLL_DECR",
         "l": "ROLL_INCR",
-        "reset": "RESET"
     }
 
     def __init__(self) -> None:

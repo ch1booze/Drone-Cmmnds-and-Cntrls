@@ -2,8 +2,8 @@ from utils import string_stripper
 
 
 class KeyBoardStateManager:
-    LEFT_JS = ["THROTTLE", "YAW"]
-    RIGHT_JS = ["PITCH", "ROLL"]
+    LEFT_JS = "THROTTLE", "YAW"
+    RIGHT_JS = "PITCH", "ROLL"
     EVENT_PRESS = "PRSS"
     EVENT_RELEASE = "RLSE"
     STRIP_LIST = ["_INCR", "_DECR"]
@@ -11,7 +11,8 @@ class KeyBoardStateManager:
     def __init__(self, mapping) -> None:
         self.mapping = None
         self.set_mapping(mapping)
-        self.states = {"LEFT_JS": None, "RIGHT_JS": None}
+        self.states = {"THROTTLE": False, "YAW": False, "PITCH": False, "ROLL": False}
+        self.js = {"LEFT": None, "RIGHT": None}
 
     def set_mapping(self, mapping):
         self.mapping = mapping
@@ -29,26 +30,40 @@ class KeyBoardStateManager:
 
     def is_pressed(self, key):
         action = self.mapping.get(key, None)
-        if action:
-            action = string_stripper(action, self.STRIP_LIST)
+        action = string_stripper(action, self.STRIP_LIST)
 
-            if action in self.LEFT_JS:
-                self.states["LEFT_JS"] = key
-            elif action in self.RIGHT_JS:
-                self.states["RIGHT_JS"] = key
+        if action in self.LEFT_JS:
+            self.reset_states("LEFT")
+            self.states[action] = True
+            self.js["LEFT"] = key
+
+        elif action in self.RIGHT_JS:
+            self.reset_states("RIGHT")
+            self.states[action] = True
+            self.js["RIGHT"] = key
 
     def is_released(self, key):
         action = self.mapping.get(key, None)
-        if action:
-            action = self.mapping[key]
-            action = string_stripper(action, self.STRIP_LIST)
+        action = string_stripper(action, self.STRIP_LIST)
 
-            if action in self.LEFT_JS:
-                if key == self.states["LEFT_JS"]:
-                    self.states["LEFT_JS"] = None
-            elif action in self.RIGHT_JS:
-                if key == self.states["RIGHT_JS"]:
-                    self.states["RIGHT_JS"] = None
+        if key == self.js["LEFT"]:
+            self.reset_states("LEFT")
+            self.js["LEFT"] = None
+        elif key == self.js["RIGHT"]:
+            self.reset_states("RIGHT")
+            self.js["RIGHT"] = None
 
+    def reset_states(self, joystick):
+        if joystick == "LEFT":
+            for a in self.LEFT_JS:
+                self.states[a] = False
+        elif joystick == "RIGHT":
+            for a in self.RIGHT_JS:
+                self.states[a] = False
+
+    def get_js(self):
+        return tuple(self.js.values())
+
+    
     def get_states(self):
-        return tuple(self.states.values())
+        return self.states

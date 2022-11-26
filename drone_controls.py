@@ -24,7 +24,6 @@ class DroneControls:
             "PITCH_DECR": self.pitch.decrease,
             "ROLL_INCR": self.roll.increase,
             "ROLL_DECR": self.roll.decrease,
-            "RESET": self.reset
         }
 
     def get_values(self):
@@ -41,8 +40,12 @@ class DroneControls:
         if action:
             self.outcomes.get(action)()
 
-    def reset(self):
-        self.throttle.reset_value()
-        self.yaw.reset_value()
-        self.pitch.reset_value()
-        self.roll.reset_value()
+    def reset(self, states):
+        if not states["THROTTLE"]:
+            self.throttle.reset_value()
+        if not states["YAW"]:        
+            self.yaw.reset_value()
+        if not states["PITCH"]:
+            self.pitch.reset_value()
+        if not states["ROLL"]:
+            self.roll.reset_value()

@@ -22,13 +22,20 @@ while True:
 
     mngr.run(event_info)  # returns key or key combo
 
-    left_js_state, right_js_state = mngr.get_states()
-    print(f"States: {left_js_state, right_js_state}")
-    left_js_action = mppng.get_action(left_js_state)
-    right_js_action = mppng.get_action(right_js_state)
+    left_js, right_js = mngr.get_js()
+    states = mngr.get_states()
 
-    cntrls.get_outcome(left_js_action)
-    cntrls.get_outcome(right_js_action)
+    print(f"JS: {left_js, right_js}")
+
+    left_js_action = mppng.get_action(left_js)
+    right_js_action = mppng.get_action(right_js)
+    cntrls.reset(states)
+
+    if left_js_action:
+        cntrls.get_outcome(left_js_action)
+
+    if left_js_action:
+        cntrls.get_outcome(right_js_action)
 
     print(f"Values: {cntrls.get_values()})")
     print()
