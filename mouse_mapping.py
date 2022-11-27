@@ -5,34 +5,36 @@ from pathlib import Path
 
 class MouseMapping:
     MAPPING_ROOT_PATH = Path("mappings/mouse/mappings.json")
-    CONTROLS = {"t": "Throttle", "y": "Yaw", "p": "Pitch", "r": "Roll"}
 
-    def __init__(self) -> None:
-        self.mappings = {}
-        self.create_mapping()
-        self.get_mapping()
+    def __init__(self, joystick="LEFT") -> None:
+        self.joystick = None
+        self.mapping = {
+            "RGHT_CLCK": None,
+            "LEFT_CLCK": None,
+            "SCRL_UP": None,
+            "SCRL_DN": None,
+        }
+        self.set_joystick(joystick)
 
-    def get_mapping(self):
-        with open(self.MAPPING_ROOT_PATH, "r") as json_obj:
-            self.mappings = json.load(json_obj)
+    def set_joystick(self, joystick):
+        self.joystick = joystick
+        self.set_mapping()
+
+    def get_joystick(self):
+        return self.joystick
 
     def set_mapping(self):
-        mode_name = input("Enter mode name: ")
-        print(list(enumerate(self.CONTROLS)))
-        control = input("Enter control that is varying: ").lower()
+        if self.joystick == "LEFT":
+            self.mapping["SCRL_UP"] = "THROTTLE_INCR"
+            self.mapping["SCRL_DN"] = "THROTTLE_DECR"
+            self.mapping["RGHT_CLCK"] = "YAW_INCR"
+            self.mapping["LEFT_CLCK"] = "YAW_DECR"
 
-        if control in self.CONTROLS.keys():
-            self.mappings[mode_name] = self.CONTROLS[control]
+        elif self.joystick == "RGHT":
+            self.mapping["SCRL_UP"] = "PITCH_INCR"
+            self.mapping["SCRL_DN"] = "PITCH_DECR"
+            self.mapping["RGHT_CLCK"] = "ROLL_INCR"
+            self.mapping["LEFT_CLCK"] = "ROLL_DECR"
 
-            self.save_mapping()
-
-    def create_mapping(self):
-        if not os.path.exists(self.MAPPING_ROOT_PATH):
-            self.save_mapping({})
-
-    def save_mapping(self, json_obj=None):
-        if not json_obj:
-            json_obj = self.mappings
-
-        with open(self.MAPPING_ROOT_PATH, "w") as json_file:
-            json.dump(self.mappings, json_file)
+    def get_mapping(self):
+        return self.mapping
