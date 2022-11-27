@@ -34,7 +34,7 @@ while True:
     if left_js_action:
         cntrls.get_outcome(left_js_action)
 
-    if left_js_action:
+    if right_js_action:
         cntrls.get_outcome(right_js_action)
 
     print(f"Values: {cntrls.get_values()})")
