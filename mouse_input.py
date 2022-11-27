@@ -39,6 +39,7 @@ class MouseInput:
             event_type = "SCRL"
             event_change = scroll_direction(event)
             event_info = event_type + "_" + event_change
+            event_info = (event_info)
 
         return event_info
 
