@@ -16,6 +16,7 @@ scripter.prewritten_script_writer()
 commands = scripter.prewritten_script_reader()
 
 # Execute commands
+print("Now executing:")
 if commands:
     exe = ScriptExecutor(commands)
     exe.run()

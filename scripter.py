@@ -46,9 +46,9 @@ class Scripter:
                 break
 
             line = self.ACTIONS[action]
-            intensity = input("ENTER INTENSITY: ")
+            intensity = input("Enter intensity: ")
             line += " " + intensity
-
+            print()
             script.append(line)
 
         script_str = ""
