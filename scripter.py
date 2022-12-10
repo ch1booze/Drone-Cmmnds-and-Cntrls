@@ -1,26 +1,37 @@
 from pathlib import Path
-from utils import list_files, create_folder, printer
+from utils import list_files, create_folder, printer, string_stripper
 
 
 class Scripter:
     SCRIPTING_ROOT_PATH = "scriptings"
-    ACTIONS = [
-        "THROTTLE_INCR",
-        "THROTTLE_DECR",
-        "YAW_DECR",
-        "YAW_INCR",
-        "PITCH_INCR",
-        "PITCH_DECR",
-        "ROLL_DECR",
-        "ROLL_INCR",
-    ]
+    LEFT_JS = "THROTTLE", "YAW"
+    RIGHT_JS = "PITCH", "ROLL"
+    ACTIONS = {
+        0: "THROTTLE_INCR",
+        1: "THROTTLE_DECR",
+        2: "YAW_DECR",
+        3: "YAW_INCR",
+        4: "PITCH_INCR",
+        5: "PITCH_DECR",
+        6: "ROLL_DECR",
+        7: "ROLL_INCR",
+    }
+    STRIP_LIST = ["_INCR", "_DECR"]
 
     def __init__(self) -> None:
         self.check_default_path()
+        self.script = None
+        self.set_script()
 
-    def write_file(self, filename, contents):
+    def set_script(self):
+        self.script = []
+
+    def get_script(self):
+        return self.script
+
+    def write_file(self, filename):
         with open(self.SCRIPTING_ROOT_PATH + "/" + filename + ".txt", "w") as f:
-            f.write(contents)
+            f.writelines(self.script)
 
     def read_file(self, file):
         with open(self.SCRIPTING_ROOT_PATH + "/" + file, "r") as f:
@@ -34,49 +45,84 @@ class Scripter:
     def check_default_path(self):
         create_folder(self.SCRIPTING_ROOT_PATH)
 
+    def script_formatter(self, actions, intensities):
+        action_nums = tuple(int(i) for i in actions.split())
+        intensity_nums = tuple(int(i) for i in intensities.split())
+
+        action_list = [self.ACTIONS[a] for a in action_nums]
+        len_action_list = len(action_list)
+
+        script_line = []
+
+        if len_action_list == 1:
+            script_line.append(action_list[0])
+            script_line.append(intensity_nums[0])
+        elif len_action_list == 2:
+            validity = self.action_validator(action_list)
+            if validity:
+                for i in range(len_action_list):
+                    script_line.append(action_list[i])
+                    script_line.append(intensity_nums[i])
+        else:
+            raise Exception("Invalid number of inputs.")
+
+        script_line = [str(s) for s in script_line]
+        script_line = " ".join(script_line)
+        script_line += "\n"
+
+        return script_line
+
+    def action_validator(self, action_list):
+        action_list_stripped = [
+            string_stripper(a, self.STRIP_LIST) for a in action_list
+        ]
+        action_js = ["l" if a in self.LEFT_JS else "r" for a in action_list_stripped]
+        return action_js[0] != action_js[1]
+
     def prewritten_script_input(self):
-        script = []
+        self.set_script()
         num_of_actions = len(self.ACTIONS)
         actions = {k: self.ACTIONS[k] for k in range(num_of_actions)}
         printer(f"Actions: {actions}")
 
         while True:
-            action = int(input("Enter number(associated with action, 99 to quit): "))
-            if action == 99:
+            actions = input("Enter number(s) (associated with action, 'q' to quit): ")
+            if actions == "q":
                 break
 
-            line = self.ACTIONS[action]
-            intensity = input("Enter intensity: ")
-            line += " " + intensity
-            print()
-            script.append(line)
-
-        script_str = ""
-        for line in script:
-            script_str += line + "\n"
-
-        return script_str
+            intensities = input("Enter intensities: ")
+            script_line = self.script_formatter(actions, intensities)
+            if script_line:
+                self.script.append(script_line)
 
     def prewritten_script_writer(self):
-        script = self.prewritten_script_input()
-        if script:
+        self.prewritten_script_input()
+
+        if self.script:
             printer(f"Scripts: {self.list_scripts()}")
             filename = input("Enter filename: ")
 
-            self.write_file(filename, script)
+            self.write_file(filename)
 
     def prewritten_script_reader(self):
-        contents = None
         scripts = self.list_scripts()
         if scripts:
             printer(scripts)
-            script_num = int(input("Enter script number (number not in list to quit): "))
-            script = scripts.get(script_num, None)
-            if script:
-                contents = self.read_file(script)
-                contents = contents.splitlines()
+            script_num = int(
+                input("Enter script number (number not in list to quit): ")
+            )
+            script_path = scripts.get(script_num, None)
+            if self.script:
+                self.script = self.read_file(script_path)
+                self.script = self.script.splitlines()
 
         else:
             print("No scripts available")
 
-        return contents
+    def postwritten_script_input(self):
+        self.set_script()
+
+
+if __name__ == "__main__":
+    sc = Scripter()
+    sc.prewritten_script_writer()
