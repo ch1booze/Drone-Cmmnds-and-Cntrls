@@ -9,11 +9,14 @@ class ScriptExecutor:
 
     def run(self):
         for command in self.commands:
-            action, intensity = command.split(" ")
+            script_line = command.split(" ")
+            actions, intensity = script_line[:-1], script_line[-1]
+
             for _ in range(int(intensity)):
-                self.cntrls.get_outcome(action)
+                for a in actions:
+                    self.cntrls.get_outcome(a)
                 time.sleep(0.01)
 
-            print(f"Values: {self.cntrls.get_values()})")
-            self.cntrls.reset()
-            print(f"Values: {self.cntrls.get_values()})")
+                print(f"Values: {self.cntrls.get_values()})")
+                self.cntrls.reset()
+                print(f"Values: {self.cntrls.get_values()})")

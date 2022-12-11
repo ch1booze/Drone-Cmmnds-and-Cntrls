@@ -30,28 +30,30 @@ class KeyBoardStateManager:
 
     def is_pressed(self, key):
         action = self.mapping.get(key, None)
-        action = string_stripper(action, self.STRIP_LIST)
+        if action:
+            action = string_stripper(action, self.STRIP_LIST)
 
-        if action in self.LEFT_JS:
-            self.reset_states("LEFT")
-            self.states[action] = True
-            self.js["LEFT"] = key
+            if action in self.LEFT_JS:
+                self.reset_states("LEFT")
+                self.states[action] = True
+                self.js["LEFT"] = key
 
-        elif action in self.RIGHT_JS:
-            self.reset_states("RIGHT")
-            self.states[action] = True
-            self.js["RIGHT"] = key
+            elif action in self.RIGHT_JS:
+                self.reset_states("RIGHT")
+                self.states[action] = True
+                self.js["RIGHT"] = key
 
     def is_released(self, key):
         action = self.mapping.get(key, None)
-        action = string_stripper(action, self.STRIP_LIST)
+        if action:
+            action = string_stripper(action, self.STRIP_LIST)
 
-        if key == self.js["LEFT"]:
-            self.reset_states("LEFT")
-            self.js["LEFT"] = None
-        elif key == self.js["RIGHT"]:
-            self.reset_states("RIGHT")
-            self.js["RIGHT"] = None
+            if key == self.js["LEFT"]:
+                self.reset_states("LEFT")
+                self.js["LEFT"] = None
+            elif key == self.js["RIGHT"]:
+                self.reset_states("RIGHT")
+                self.js["RIGHT"] = None
 
     def reset_states(self, joystick):
         if joystick == "LEFT":
@@ -64,6 +66,5 @@ class KeyBoardStateManager:
     def get_js(self):
         return tuple(self.js.values())
 
-    
     def get_states(self):
         return self.states

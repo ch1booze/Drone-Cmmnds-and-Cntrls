@@ -1,19 +1,17 @@
-from scripter import Scripter
+from prewritten_scripter import PrewrittenScripter
 from script_executor import ScriptExecutor
 
 # Initialisation of Scripter class
-scripter = Scripter()
-
-# List available scripts
-print("List of available scripts:")
-print(scripter.list_scripts()) # should be empty
+scripter = PrewrittenScripter()
 
 # Writes command to .txt file
-scripter.prewritten_script_writer()
+# scripter.prewritten_script_writer()
 
 # Read list of available scripts
 # If one or more is available, select to read
-commands = scripter.prewritten_script_reader()
+scripter.prewritten_script_reader()
+commands = scripter.get_script()
+print(commands)
 
 # Execute commands
 print("Now executing:")
