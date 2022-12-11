@@ -1,8 +1,7 @@
-from pathlib import Path
 from utils import list_files, create_folder, printer, string_stripper
 
 
-class Scripter:
+class PrewrittenScripter:
     SCRIPTING_ROOT_PATH = "scriptings"
     LEFT_JS = "THROTTLE", "YAW"
     RIGHT_JS = "PITCH", "ROLL"
@@ -45,9 +44,9 @@ class Scripter:
     def check_default_path(self):
         create_folder(self.SCRIPTING_ROOT_PATH)
 
-    def script_formatter(self, actions, intensities):
+    def script_formatter(self, actions, intensity):
         action_nums = tuple(int(i) for i in actions.split())
-        intensity_nums = tuple(int(i) for i in intensities.split())
+        intensity_num = int(intensity)
 
         action_list = [self.ACTIONS[a] for a in action_nums]
         len_action_list = len(action_list)
@@ -56,14 +55,15 @@ class Scripter:
 
         if len_action_list == 1:
             script_line.append(action_list[0])
-            script_line.append(intensity_nums[0])
         elif len_action_list == 2:
             validity = self.action_validator(action_list)
             if validity:
                 for i in range(len_action_list):
                     script_line.append(action_list[i])
-                    script_line.append(intensity_nums[i])
-        else:
+
+        script_line.append(intensity_num)
+
+        if len_action_list > 2:
             raise Exception("Invalid number of inputs.")
 
         script_line = [str(s) for s in script_line]
@@ -90,8 +90,8 @@ class Scripter:
             if actions == "q":
                 break
 
-            intensities = input("Enter intensities: ")
-            script_line = self.script_formatter(actions, intensities)
+            intensity = input("Enter intensity: ")
+            script_line = self.script_formatter(actions, intensity)
             if script_line:
                 self.script.append(script_line)
 
@@ -112,7 +112,7 @@ class Scripter:
                 input("Enter script number (number not in list to quit): ")
             )
             script_path = scripts.get(script_num, None)
-            if self.script:
+            if script_path:
                 self.script = self.read_file(script_path)
                 self.script = self.script.splitlines()
 
@@ -124,5 +124,5 @@ class Scripter:
 
 
 if __name__ == "__main__":
-    sc = Scripter()
+    sc = PrewrittenScripter()
     sc.prewritten_script_writer()
