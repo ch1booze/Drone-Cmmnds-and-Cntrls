@@ -1,0 +1,32 @@
+# TODO: Get name(s) of gamepad(s) connected
+    # def list_gamepads(self):
+    #     gmpds = inputs.devices.gamepads
+    #     return gmpds
+
+    # # TODO: Connect gamepad
+    # def get_gamepad(self):
+    #     try:
+    #         self.gamepad = inputs.devices.gamepads[0]
+    #     except IndexError:
+    #         raise inputs.UnpluggedError("No gamepad found.")
+
+    # # TODO: Get name of all events possible on gamepad
+    # def read_events(self) -> inputs.InputEvent:
+    #     try:
+    #         events = self.gamepad.read()
+    #     except EOFError:
+    #         events = []
+
+    #     return events[0]
+
+    # # TODO: Check attributes and methods
+    # def check_attr_meth(self) -> dict:
+    #     e = self.read_events()
+    #     dct = {}
+    #     dct["code"] = e.code
+    #     dct["ev_type"] = e.ev_type
+    #     # dct["device"] = e.device
+    #     dct["state"] = e.state
+    #     # dct["timestamp"] = e.timestamp
+
+    #     return dct
