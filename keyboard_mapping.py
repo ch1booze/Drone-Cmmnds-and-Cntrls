@@ -1,5 +1,3 @@
-from mapping import Mapping
-
 KEYBOARD_MAPPING = {
         "w": "THROTTLE_INCR",
         "s": "THROTTLE_DECR",
@@ -10,7 +8,3 @@ KEYBOARD_MAPPING = {
         "j": "ROLL_DECR",
         "l": "ROLL_INCR",
     }
-
-class KeyboardMapping(Mapping):
-    def __init__(self) -> None:
-        super().__init__(KEYBOARD_MAPPING)
