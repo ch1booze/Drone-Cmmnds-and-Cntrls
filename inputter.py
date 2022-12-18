@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
+EVENT_TYPES = ("PRSS", "RLSE")
 
 class Inputter(ABC):
-    EVENT_TYPES = ("PRSS", "RLSE", "SPCL")
     def __init__(self) -> None:
         self._set_event_catcher()
 

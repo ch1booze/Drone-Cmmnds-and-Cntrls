@@ -1,6 +1,6 @@
 from pynput import keyboard
 
-from inputter import Inputter
+from inputter import Inputter, EVENT_TYPES
 from utils import string_stripper
 
 
@@ -45,12 +45,11 @@ class KeyboardInputter(Inputter):
 
         if COMBINATION_KEY in key:
             key = key_combo(key)
-            event_type = self.EVENT_TYPES[2]
-        elif type(event_data) == PRESS:
-            event_type = self.EVENT_TYPES[0]
+
+        if type(event_data) == PRESS:
+            event_type = EVENT_TYPES[0]
         elif type(event_data) == RELEASE:
-            event_type = self.EVENT_TYPES[1]
+            event_type = EVENT_TYPES[1]
 
-        event_info = {"event_type": event_type, "key": key}
-
+        event_info = {"type": event_type, "key": key}
         return event_info
