@@ -1,11 +1,26 @@
+from utils import list_files, printer
+
+
 class PostwrittenScripter:
     CTRLS = ["THROTTLE", "YAW", "PITCH", "ROLL"]
+    SCRIPTING_ROOT_PATH = "scriptings"
 
     def __init__(self) -> None:
         self.script = []
         self.gradient = {c: 0 for c in self.CTRLS}
         self.control_values = {c: 0 for c in self.CTRLS}
         self.mag_dir = {c: 0 for c in self.CTRLS}
+
+    def list_scripts(self):
+        return list_files(self.SCRIPTING_ROOT_PATH)
+
+    def write_file(self, filename):
+        with open(self.SCRIPTING_ROOT_PATH + "/" + filename + ".txt", "w") as f:
+            f.writelines(self.script)
+
+
+    def get_script(self):
+        return self.script
 
     def reset_mag_dir(self):
         self.mag_dir = {c: 0 for c in self.CTRLS}
@@ -52,6 +67,14 @@ class PostwrittenScripter:
 
         if mag:
             line += str(mag)
-        
+
         if line:
             self.script.append(line)
+
+    def postwritten_script_writer(self):
+        if self.script:
+            printer(f"Scripts: {self.list_scripts()}")
+            filename = input("Enter filename: ")
+
+            self.write_file(filename)
+

@@ -32,11 +32,6 @@ class PrewrittenScripter:
         with open(self.SCRIPTING_ROOT_PATH + "/" + filename + ".txt", "w") as f:
             f.writelines(self.script)
 
-    def read_file(self, file):
-        with open(self.SCRIPTING_ROOT_PATH + "/" + file, "r") as f:
-            contents = f.read()
-
-        return contents
 
     def list_scripts(self):
         return list_files(self.SCRIPTING_ROOT_PATH)
@@ -103,26 +98,3 @@ class PrewrittenScripter:
             filename = input("Enter filename: ")
 
             self.write_file(filename)
-
-    def prewritten_script_reader(self):
-        scripts = self.list_scripts()
-        if scripts:
-            printer(scripts)
-            script_num = int(
-                input("Enter script number (number not in list to quit): ")
-            )
-            script_path = scripts.get(script_num, None)
-            if script_path:
-                self.script = self.read_file(script_path)
-                self.script = self.script.splitlines()
-
-        else:
-            print("No scripts available")
-
-    def postwritten_script_input(self):
-        self.set_script()
-
-
-if __name__ == "__main__":
-    sc = PrewrittenScripter()
-    sc.prewritten_script_writer()
