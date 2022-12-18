@@ -1,6 +1,6 @@
 from drone_controls import DroneControls
 from keyboard_input import KeyboardInput
-from keyboard_mapping import KeyboardMapping
+from keyboard_mapping_ import KeyboardMapping
 from keyboard_state_manager import KeyBoardStateManager
 
 inptter = KeyboardInput()  # reads in keyboard input
