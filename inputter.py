@@ -4,10 +4,10 @@ EVENT_TYPES = ("PRSS", "RLSE")
 
 class Inputter(ABC):
     def __init__(self) -> None:
-        self._set_event_catcher()
+        self.set_event_catcher()
 
     @abstractmethod
-    def _set_event_catcher(self):
+    def set_event_catcher(self):
         # Sets the input device from event events are to be read from.
         raise NotImplementedError("Input device setter not implemented.")
 

@@ -5,13 +5,13 @@ from utils import string_stripper
 
 
 class KeyboardInputter(Inputter):
-    def _set_event_catcher(self):
+    def set_event_catcher(self):
         """Setting event listener for keyboard."""
-        self._event_catcher = keyboard.Events()
-        self._event_catcher.start()
+        self.event_catcher = keyboard.Events()
+        self.event_catcher.start()
 
     def read_event(self):
-        event_data = self._event_catcher.get()
+        event_data = self.event_catcher.get()
         return event_data
 
     def resolve_event(self, event_data) -> dict:
