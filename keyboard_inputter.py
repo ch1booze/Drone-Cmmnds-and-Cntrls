@@ -5,28 +5,58 @@ from utils import string_stripper
 
 
 class KeyboardInputter(Inputter):
+    """Handles keyboard inputs as events.
+
+    Attributes:
+        event_catcher: A Keyboard.Events object that represents the keyboard from which events
+        are to be read from.
+    """
+
     def set_event_catcher(self):
         """Setting event listener for keyboard."""
+
         self.event_catcher = keyboard.Events()
         self.event_catcher.start()
 
     def read_event(self):
+        """Get input from the keyboard in form of a Press | Release object.
+
+        Returns:
+            A pynput.keyboard.Press | Release object.
+        """
+
         event_data = self.event_catcher.get()
         return event_data
 
     def resolve_event(self, event_data) -> dict:
+        """Returns a structured event information from gamepad event data.
+
+        Args:
+            *event_data: A pynput.keyboard.Press | Release object containing the string that encodes the
+            key or key combination that was pressed or released.
+
+        Returns:
+            A dict that takes the form:
+                {
+                    "key": "<key input from gamepad>",
+                    "type": <whether or not the event was a press or release>
+                }
+        """
+
         COMBINATION_KEY = "\\"
         SHORTCUT_KEY = "ctrl"
         PRESS = keyboard.Events.Press
         RELEASE = keyboard.Events.Release
-        STRIP_LIST = ["'", "_l", "_r", "Key."]
+        STRIP_LIST = "'", "_l", "_r", "Key."
 
         def get_key(event_data):
+            # Returns the key attribute (str) from the 'event_data'
             key_string = str(event_data.key)
             key_string = string_stripper(key_string, STRIP_LIST)
             return key_string
 
         def key_combo(key_combo_hex):
+            # Determines if the string is a key or a key combination (i.e. Control + Letter)
             hex_str = key_combo_hex.replace(COMBINATION_KEY, "")
             letter = None
 

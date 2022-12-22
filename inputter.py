@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-EVENT_TYPES = ("PRSS", "RLSE")
+EVENT_TYPES = "PRSS", "RLSE"  # Press and Release
+
 
 class Inputter(ABC):
     def __init__(self) -> None:
