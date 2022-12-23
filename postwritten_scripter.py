@@ -1,9 +1,9 @@
-from utils import list_files, printer
+from utils import list_files, printer, write_file
 
 
 class PostwrittenScripter:
-    CTRLS = ["THROTTLE", "YAW", "PITCH", "ROLL"]
-    SCRIPTING_ROOT_PATH = "scriptings"
+    CTRLS = "THROTTLE", "YAW", "PITCH", "ROLL"
+    SCRIPTING_ROOT_PATH = "scriptings/postwritten"
 
     def __init__(self) -> None:
         self.script = []
@@ -13,11 +13,6 @@ class PostwrittenScripter:
 
     def list_scripts(self):
         return list_files(self.SCRIPTING_ROOT_PATH)
-
-    def write_file(self, filename):
-        with open(self.SCRIPTING_ROOT_PATH + "/" + filename + ".txt", "w") as f:
-            f.writelines(self.script)
-
 
     def get_script(self):
         return self.script
@@ -76,5 +71,8 @@ class PostwrittenScripter:
             printer(f"Scripts: {self.list_scripts()}")
             filename = input("Enter filename: ")
 
-            self.write_file(filename)
-
+            write_file(
+                folder_path=self.SCRIPTING_ROOT_PATH,
+                file_contents=self.script,
+                filename=filename,
+            )
