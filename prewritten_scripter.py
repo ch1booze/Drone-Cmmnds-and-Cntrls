@@ -21,9 +21,6 @@ class PrewrittenScripter:
         self.check_default_path()
         self.script = []
 
-    def get_script(self):
-        return self.script
-
     def write_file(self, filename):
         with open(self.SCRIPTING_ROOT_PATH + "/" + filename + ".txt", "w") as f:
             f.writelines(self.script)

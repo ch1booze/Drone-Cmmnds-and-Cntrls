@@ -1,11 +1,7 @@
-from abc import ABC
-
-
-class Mapping(ABC):
-    def __init__(self, mapping) -> None:
-        self.set_mapping(mapping)
-
-    def set_mapping(self, mapping):
+class Mapping:
+    """Maps inputs from Inputter object to its corresponding command."""
+    
+    def __init__(self, mapping: dict) -> None:
         self.mapping = mapping
 
     def get_mapping(self):
