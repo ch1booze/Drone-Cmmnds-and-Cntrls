@@ -36,6 +36,13 @@ def string_stripper(string, strip_list):
     return stripped_str
 
 
+def write_file(filename, file_contents, folder_path):
+    with open(folder_path + "/" + filename + ".txt", "w") as f:
+        f.writelines(file_contents)
+
+def user_input():
+    ...
+
 def printer(obj):
     print()
     pprint.pp(obj)
