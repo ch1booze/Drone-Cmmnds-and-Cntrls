@@ -86,4 +86,8 @@ class PostwrittenScripter:
             printer(f"Scripts: {self.list_scripts()}")
             filename = input("Enter filename: ")
 
-            self.write_file(filename)
+            write_file(
+                folder_path=self.SCRIPTING_ROOT_PATH,
+                file_contents=self.script,
+                filename=filename,
+            )
