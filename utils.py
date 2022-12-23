@@ -2,7 +2,15 @@ import os
 import pprint
 
 
-def reverse_mapping(dictionary):
+def reverse_mapping(dictionary: dict) -> dict:
+    """Swaps and retruns keys for values and vice versa of a dictionary.
+
+    Args:
+        dictionary: A Python dictionary with boths keys and values as unique strings.
+
+    Returns:
+        A Python dictionary with 'dictionary' keys as values and 'dictionary' values as keys."""
+
     reversed_dict = dict([(v, k) for k, v in dictionary.items()])
     return reversed_dict
 
