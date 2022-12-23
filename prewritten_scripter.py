@@ -1,8 +1,8 @@
-from utils import create_folder, list_files, printer, string_stripper, write_file
+from utils import list_files, create_folder, printer, string_stripper
 
 
 class PrewrittenScripter:
-    SCRIPTING_ROOT_PATH = "scriptings/prewritten"
+    SCRIPTING_ROOT_PATH = "scriptings"
     LEFT_JS = "THROTTLE", "YAW"
     RIGHT_JS = "PITCH", "ROLL"
     ACTIONS = {
@@ -15,7 +15,7 @@ class PrewrittenScripter:
         6: "ROLL_DECR",
         7: "ROLL_INCR",
     }
-    STRIP_LIST = "_INCR", "_DECR"
+    STRIP_LIST = ["_INCR", "_DECR"]
 
     def __init__(self) -> None:
         self.check_default_path()
@@ -67,6 +67,7 @@ class PrewrittenScripter:
         return action_js[0] != action_js[1]
 
     def prewritten_script_input(self):
+        self.set_script()
         num_of_actions = len(self.ACTIONS)
         actions = {k: self.ACTIONS[k] for k in range(num_of_actions)}
         printer(f"Actions: {actions}")
@@ -82,20 +83,10 @@ class PrewrittenScripter:
                 self.script.append(script_line)
 
     def prewritten_script_writer(self):
-        self.script = []
         self.prewritten_script_input()
 
         if self.script:
             printer(f"Scripts: {self.list_scripts()}")
             filename = input("Enter filename: ")
 
-            write_file(
-                folder_path=self.SCRIPTING_ROOT_PATH,
-                file_contents=self.script,
-                filename=filename,
-            )
-
-
-if __name__ == "__main__":
-    prewrttn_scrptr = PrewrittenScripter()
-    prewrttn_scrptr.prewritten_script_writer()
+            self.write_file(filename)

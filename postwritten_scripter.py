@@ -30,10 +30,11 @@ class PostwrittenScripter:
     def list_scripts(self):
         return list_files(self.SCRIPTING_ROOT_PATH)
 
-    def get_script(self):
-        return self.script
+    def write_file(self, filename: str):
+        with open(self.SCRIPTING_ROOT_PATH + "/" + filename + ".txt", "w") as f:
+            f.writelines(self.script)
 
-    def reset_mag_dir(self):
+    def reset_mag_dir(self) -> None:
         self.mag_dir = {c: 0 for c in self.CTRLS}
 
     def update_mag_dir(self) -> None:
@@ -85,8 +86,4 @@ class PostwrittenScripter:
             printer(f"Scripts: {self.list_scripts()}")
             filename = input("Enter filename: ")
 
-            write_file(
-                folder_path=self.SCRIPTING_ROOT_PATH,
-                file_contents=self.script,
-                filename=filename,
-            )
+            self.write_file(filename)
