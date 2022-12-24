@@ -2,6 +2,13 @@ from base_control import BaseControl
 
 
 class DroneControls:
+    """"This represents a drone controller with the four controls i.e. throttle, yaw, pitch, and roll.
+    
+    Attributes:
+        *throttle, yaw, pitch, roll: BaseControl objects that represent controls on a drone controller.
+        *outcomes: A dict of commands with their associated functions.
+    
+    """
     MAGNITUDE = 200
     RATE_OF_CHANGE = 1
 
