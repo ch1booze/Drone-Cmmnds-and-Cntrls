@@ -24,32 +24,39 @@ class PostwrittenScripter:
         self.control_values = {c: 0 for c in self.CTRLS}
 
     def check_default_path(self):
-        """"""
+        """Checks if path to which scripts (.txt) files are to be saved exists."""
+
         create_folder(self.SCRIPTING_ROOT_PATH)
 
     def list_scripts(self):
+        """List filenames that are in postwrittien scripts folder."""
+
         return list_files(self.SCRIPTING_ROOT_PATH)
 
-    def write_file(self, filename: str):
-        with open(self.SCRIPTING_ROOT_PATH + "/" + filename + ".txt", "w") as f:
-            f.writelines(self.script)
-
     def reset_mag_dir(self) -> None:
+        """Resets magnitude and direction to zero."""
+
         self.mag_dir = {c: 0 for c in self.CTRLS}
 
     def update_mag_dir(self) -> None:
+        """Updates magnitude and direction with gradient values."""
+
         for c in self.CTRLS:
             self.mag_dir[c] += self.gradient[c]
 
     def calc_gradient(self, new_control_values: dict) -> dict:
-        grad = {c: new_control_values[c] - self.control_values[c] for c in self.CTRLS}
+        """Calculates difference in new controls values and current contorl values."""
 
+        grad = {c: new_control_values[c] - self.control_values[c] for c in self.CTRLS}
         return grad
 
     def is_zero_gradient(self) -> bool:
+        """Check if gradient is zero i.e. no change in control values."""
+
         return sum(list(self.gradient.values())) == 0
 
     def check_event(self, new_control_values: dict) -> None:
+        
         grad = self.calc_gradient(new_control_values)
 
         if self.gradient == grad or self.is_zero_gradient():
