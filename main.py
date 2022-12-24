@@ -24,11 +24,11 @@ class DroneNet:
 
         self.controls = DroneControls()
 
-        # self.scrpt_exe = ScriptExecutor()
         self.prewrttn_scrptr = PrewrittenScripter()
         self.pstwrttn_scrptr = PostwrittenScripter()
+        self.scrpt_exe = ScriptExecutor()
 
-        self.armed = None
+        self.armed = False
         self.disarm()
         self.input_device = self.DEVICES[0]
         self.exit = False
@@ -58,8 +58,11 @@ class DroneNet:
             elif event_info["key"] == "ctrl+p":
                 self.prewrttn_scrptr.prewritten_script_writer()
 
-            elif event_info["key"] == "ctrl+e":
+            elif event_info["key"] == "ctrl+a":
                 self.arm()
+
+            elif event_info["key"] == "ctrl+e":
+                self.scrpt_exe.get_file_commands()
 
             elif event_info["key"] == "ctrl+q":
                 self.disarm()

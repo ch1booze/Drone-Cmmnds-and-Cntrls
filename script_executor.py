@@ -31,7 +31,7 @@ class ScriptExecutor:
         contents = contents.splitlines()
         return contents
 
-    def select_file(self):
+    def get_file_commands(self):
         """Select a .txt file from the folder that stores the scripts.
 
         Check for the type of the script to be read. Select from a list the names of files of
@@ -54,9 +54,5 @@ class ScriptExecutor:
         if script_number is not None:
             contents = self.read_file(script_path + "/" + script_file)
             self.script = contents
-        print(self.script)
 
-
-if __name__ == "__main__":
-    exe = ScriptExecutor()
-    exe.select_file()
+        printer(self.script)
