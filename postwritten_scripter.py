@@ -4,6 +4,16 @@ from utils import create_folder, list_files, printer, write_file
 class PostwrittenScripter:
     """This records the commands that are being executed by a DroneControl object.
 
+    Post in 'PostwrittenScripter' means written after the command has been executed. 
+    Format of commands script is:
+        # example.txt
+        THROTTLE_DECR 24
+        YAW_INCR PITCH_INCR 30
+        ROLL_INCR 23
+
+    NB: A command can has one or two command types. When two, it means both left and right joysticks have been pressed 
+    simultaneously. The number at the end is the number of times it should run for.
+
     Attributes:
         *script: A list of the commands that are being executed by a DroneControl object.
         *control_values: Stores the current values of the DroneControl object being monitored.
@@ -29,7 +39,7 @@ class PostwrittenScripter:
         create_folder(self.SCRIPTING_ROOT_PATH)
 
     def list_scripts(self):
-        """List filenames that are in postwrittien scripts folder."""
+        """List filenames that are in postwritten scripts folder."""
 
         return list_files(self.SCRIPTING_ROOT_PATH)
 
@@ -56,9 +66,18 @@ class PostwrittenScripter:
         return sum(list(self.gradient.values())) == 0
 
     def check_event(self, new_control_values: dict) -> None:
-        
+        """Updates the script with a command.
+
+        Checks to see there is a change in gradient. If so,  add the command to the list of commands stored in 'script'. 
+        Then, reset magnitiude and direction of current command. Perform updates to gradient.
+
+        Args:
+            *new_control_values: A dict containing the next state control values of the DroneControl object being monitored.
+        """
+
         grad = self.calc_gradient(new_control_values)
 
+        # Check for change in gradient
         if self.gradient == grad or self.is_zero_gradient():
             self.update_mag_dir()
 
@@ -68,14 +87,16 @@ class PostwrittenScripter:
 
         self.gradient = grad
         self.control_values = new_control_values
-        print(f"Grad: {self.gradient}")
 
     def add_script_line(self) -> None:
+        """Adds current command to list of commands being recorded in 'script'."""
+
         line = ""
         mag_vals = set(self.mag_dir.values())
         mag = None
 
         for k in self.mag_dir:
+            # Check for direction and record magnitude in that direction
             if self.mag_dir[k] > 0:
                 line += k + "_INCR "
                 mag = max(mag_vals)
@@ -89,6 +110,8 @@ class PostwrittenScripter:
             self.script.append(line)
 
     def postwritten_script_writer(self) -> None:
+        """Saves script currently recorded into a .txt file."""
+
         if self.script:
             printer(f"Scripts: {self.list_scripts()}")
             filename = input("Enter filename: ")
@@ -98,3 +121,4 @@ class PostwrittenScripter:
                 file_contents=self.script,
                 filename=filename,
             )
+            self.script = [] # Reset 'script'
