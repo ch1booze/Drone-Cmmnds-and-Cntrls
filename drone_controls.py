@@ -7,8 +7,8 @@ class DroneControls:
     Attributes:
         *throttle, yaw, pitch, roll: BaseControl objects that represent controls on a drone controller.
         *outcomes: A dict of commands with their associated functions.
-    
     """
+    
     MAGNITUDE = 200
     RATE_OF_CHANGE = 1
 
