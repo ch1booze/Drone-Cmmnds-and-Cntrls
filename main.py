@@ -11,6 +11,7 @@ from prewritten_scripter import PrewrittenScripter
 from script_file_reader import ScriptFileReader
 from state_manager import StateManager
 from utils import printer
+from serial_comm import SerialComm
 
 
 class DroneController:
@@ -43,6 +44,7 @@ class DroneController:
 
     def __init__(self) -> None:
         self.controls = DroneControls()
+        self.ser_comm = SerialComm()
 
         # Keybaord related classes
         self.kybd_inpttr = KeyboardInputter()
@@ -178,6 +180,7 @@ class DroneController:
                         self.controls.get_outcome(right_js_action)
 
                     vals = self.controls.get_values()
+                    self.ser_comm(vals)
 
                     self.pstwrttn_scrptr.check_event(vals)
 
@@ -211,6 +214,7 @@ class DroneController:
                         self.controls.get_outcome(right_js_action)
 
                     vals = self.controls.get_values()
+                    self.ser_comm.send_Arduino_data(vals)
 
                     self.pstwrttn_scrptr.check_event(vals)
 
