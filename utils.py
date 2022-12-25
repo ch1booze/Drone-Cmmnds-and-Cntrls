@@ -74,12 +74,13 @@ def write_file(filename: str, file_contents: List[str], folder_path: str) -> Non
     Used in 'postwritten_scripter.py' and 'prewritten_scripter.py'.
     
     Args:
-        filename: A str containing the name of the file.
-        file_contents: A list of str to be stored in the .txt file.
-        folder_path: A str having the path that the .txt file is to be stored.
+        *filename: A str containing the name of the file.
+        *file_contents: A list of str to be stored in the .txt file.
+        *folder_path: A str having the path that the .txt file is to be stored.
     """
+    file_path = fr"{folder_path}/{filename}.txt"
 
-    with open(folder_path + "/" + filename + ".txt", "w") as f:
+    with open(file_path, "w") as f:
         f.writelines(file_contents)
 
 def printer(obj) -> None:

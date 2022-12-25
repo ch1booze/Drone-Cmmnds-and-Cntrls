@@ -1,17 +1,19 @@
+from datetime import datetime
+
 from utils import create_folder, list_files, printer, write_file
 
 
 class PostwrittenScripter:
     """This records the commands that are being executed by a DroneControl object.
 
-    Post in 'PostwrittenScripter' means written after the command has been executed. 
+    Post in 'PostwrittenScripter' means written after the command has been executed.
     Format of commands script is:
         # example.txt
         THROTTLE_DECR 24
         YAW_INCR PITCH_INCR 30
         ROLL_INCR 23
 
-    NB: A command can has one or two command types. When two, it means both left and right joysticks have been pressed 
+    NB: A command can has one or two command types. When two, it means both left and right joysticks have been pressed
     simultaneously. The number at the end is the number of times it should run for.
 
     Attributes:
@@ -68,7 +70,7 @@ class PostwrittenScripter:
     def check_event(self, new_control_values: dict) -> None:
         """Updates the script with a command.
 
-        Checks to see there is a change in gradient. If so,  add the command to the list of commands stored in 'script'. 
+        Checks to see there is a change in gradient. If so,  add the command to the list of commands stored in 'script'.
         Then, reset magnitiude and direction of current command. Perform updates to gradient.
 
         Args:
@@ -107,18 +109,32 @@ class PostwrittenScripter:
         if mag:
             line += str(mag)
         if line:
+            print(f"-> {line}")
             self.script.append(line)
 
     def postwritten_script_writer(self) -> None:
         """Saves script currently recorded into a .txt file."""
 
         if self.script:
-            printer(f"Scripts: {self.list_scripts()}")
-            filename = input("Enter filename: ")
+            now = datetime.now()
+            filename = (
+                f"{now.year}{now.month}{now.day}_{now.hour}{now.minute}{now.second}"
+            )
 
             write_file(
                 folder_path=self.SCRIPTING_ROOT_PATH,
                 file_contents=self.script,
                 filename=filename,
             )
-            self.script = [] # Reset 'script'
+            self.script = []  # Reset 'script'
+
+            print("----------------------------")
+            print()
+            print(f"Script saved at {filename}.txt")
+            print()
+            print("----------------------------")
+
+
+if __name__ == "__main__":
+    p = PostwrittenScripter()
+    p.postwritten_script_writer()

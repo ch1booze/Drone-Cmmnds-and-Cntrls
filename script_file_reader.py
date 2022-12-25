@@ -1,7 +1,7 @@
 from utils import printer, list_files
 
 
-class ScriptExecutor:
+class ScriptFileReader:
     """This handles the execution of scripts that can used to control a DroneControls object.
 
     Attributes:
@@ -11,9 +11,6 @@ class ScriptExecutor:
 
     SCRIPTING_ROOT_PATH = "scriptings"
     SCRIPT_TYPES = "prewritten", "postwritten"
-
-    def __init__(self) -> None:
-        self.script = []
 
     def read_file(self, file_path: str):
         """This reads a .txt file containing commands to be executed to control a DroneControl object.
@@ -31,7 +28,7 @@ class ScriptExecutor:
         contents = contents.splitlines()
         return contents
 
-    def get_file_commands(self):
+    def get_file_contents(self):
         """Select a .txt file from the folder that stores the scripts.
 
         Check for the type of the script to be read. Select from a list the names of files of
@@ -53,6 +50,5 @@ class ScriptExecutor:
         # Load commands from file into 'script'.
         if script_number is not None:
             contents = self.read_file(script_path + "/" + script_file)
-            self.script = contents
 
-        printer(self.script)
+        return contents

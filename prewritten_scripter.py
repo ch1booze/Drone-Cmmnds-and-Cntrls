@@ -66,7 +66,7 @@ class PrewrittenScripter:
         intensity_num = int(intensity)
 
         # Get the actions associated
-        action_list = (self.ACTIONS[a] for a in action_nums)
+        action_list = [self.ACTIONS[a] for a in action_nums]
         len_action_list = len(action_list)
 
         script_line = []
@@ -100,7 +100,7 @@ class PrewrittenScripter:
         action_list_stripped = (
             string_stripper(a, self.STRIP_LIST) for a in action_list
         )
-        action_js = ("l" if a in self.LEFT_JS else "r" for a in action_list_stripped)
+        action_js = ["l" if a in self.LEFT_JS else "r" for a in action_list_stripped]
 
         return action_js[0] != action_js[1]
 
@@ -140,6 +140,8 @@ class PrewrittenScripter:
         """Saves script currently recorded into a .txt file."""
 
         self.script = []
+
+        print("----------------------------")
         self.prewritten_script_input()
 
         if self.script:
@@ -151,6 +153,8 @@ class PrewrittenScripter:
                 file_contents=self.script,
                 filename=filename,
             )
+        print("----------------------------")
+        
 
 
 if __name__ == "__main__":
