@@ -1,5 +1,3 @@
-import time
-
 import serial.tools.list_ports
 import serial
 
@@ -14,17 +12,16 @@ class SerialComm:
 
     def set_Arduino(self):
         if self.com_port:
-            self.Arduino = serial.Serial(
-                self.com_port, self.baud_rate
-                )
+            self.Arduino = serial.Serial(self.com_port, self.baud_rate)
+            print("Arduino found!")
 
     def get_Arduino_port(self):
-        ports = serial.tools.list_ports.comports() 
+        ports = serial.tools.list_ports.comports()
         com_port = ""
-
+        print(ports)
         for port in ports:
             port_str = str(port)
-            if "Arduino" in port_str:
+            if "CH340" in port_str:
                 com_port = port_str.split()[0]
                 break
 
@@ -33,13 +30,16 @@ class SerialComm:
         else:
             print("Arduino not found!")
 
-    def send_Arduino_data(self, data):
-        self
+    def send_Arduino_data(self, data: str) -> None:
+        print("Got here!")
         self.Arduino.write(f"{data}/r".encode())
 
-        
 
 if __name__ == "__main__":
-    ports = serial.tools.list_ports.comports() 
-
-    print(ports)
+    s = SerialComm()
+    while True:
+        cmd = input("-> ")
+        if cmd == "q":
+            break
+        else:
+            s.send_Arduino_data(cmd)

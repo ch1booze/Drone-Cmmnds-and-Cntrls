@@ -9,9 +9,9 @@ from mapping import Mapping
 from postwritten_scripter import PostwrittenScripter
 from prewritten_scripter import PrewrittenScripter
 from script_file_reader import ScriptFileReader
+from serial_comm import SerialComm
 from state_manager import StateManager
 from utils import printer
-from serial_comm import SerialComm
 
 
 class DroneController:
@@ -179,9 +179,9 @@ class DroneController:
                     if right_js_action is not None:
                         self.controls.get_outcome(right_js_action)
 
-                    vals = self.controls.get_values()
-                    self.ser_comm(vals)
+                    self.send_ser_comm_command()
 
+                    vals = self.controls.get_values()
                     self.pstwrttn_scrptr.check_event(vals)
 
     def gmpd_control(self):
@@ -202,7 +202,6 @@ class DroneController:
                     left_js, right_js = self.kybd_state_mngr.get_js()
                     states = self.kybd_state_mngr.get_states()
 
-
                     left_js_action = self.kybd_mppng.get_action(left_js)
                     right_js_action = self.kybd_mppng.get_action(right_js)
                     self.controls.reset(states)
@@ -213,9 +212,9 @@ class DroneController:
                     if right_js_action:
                         self.controls.get_outcome(right_js_action)
 
-                    vals = self.controls.get_values()
-                    self.ser_comm.send_Arduino_data(vals)
+                    self.send_ser_comm_command()
 
+                    vals = self.controls.get_values()
                     self.pstwrttn_scrptr.check_event(vals)
 
     def kybd_help(self):
@@ -239,6 +238,15 @@ Shortcut information:
         """
         )
         print("----------------------------")
+
+    def send_ser_comm_command(self):
+        vals = self.controls.get_values()
+        comm_str = ""
+        for i in vals.values():
+            c = i + 200
+            comm_str += str(c).zfill(3)
+
+        self.ser_comm.send_Arduino_data(comm_str)
 
     def gmpd_help(self):
         """List all the instructions for how to use gamepad as input device."""
