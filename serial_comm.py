@@ -31,7 +31,6 @@ class SerialComm:
             print("Arduino not found!")
 
     def send_Arduino_data(self, data: str) -> None:
-        print("Got here!")
         self.Arduino.write(f"{data}/r".encode())
 
 
