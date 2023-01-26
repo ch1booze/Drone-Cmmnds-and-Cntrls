@@ -110,7 +110,7 @@ class PostwrittenScripter:
             line += str(mag)
         if line:
             print(f"-> {line}")
-            self.script.append(line)
+            self.script.append(line + "\n")
 
     def postwritten_script_writer(self) -> None:
         """Saves script currently recorded into a .txt file."""

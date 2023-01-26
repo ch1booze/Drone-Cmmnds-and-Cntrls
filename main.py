@@ -44,7 +44,7 @@ class DroneController:
 
     def __init__(self) -> None:
         self.controls = DroneControls()
-        self.ser_comm = SerialComm()
+        # self.ser_comm = SerialComm()
 
         # Keybaord related classes
         self.kybd_inpttr = KeyboardInputter()
