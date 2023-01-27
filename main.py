@@ -163,26 +163,36 @@ class DroneController:
                 self.exit = True
 
             # NORMAL COMMANDS
+            # else:
+            #     if self.armed:
+            #         self.kybd_state_mngr.run(event_info)
+            #         left_js, right_js = self.kybd_state_mngr.get_js()
+            #         states = self.kybd_state_mngr.get_states()
+
+            #         left_js_action = self.kybd_mppng.get_action(left_js)
+            #         right_js_action = self.kybd_mppng.get_action(right_js)
+            #         self.controls.reset(states)
+
+            #         if left_js_action is not None:
+            #             self.controls.get_outcome(left_js_action)
+
+            #         if right_js_action is not None:
+            #             self.controls.get_outcome(right_js_action)
+
+            #         self.send_ser_comm_command()
+
+            #         vals = self.controls.get_values()
+            #         self.pstwrttn_scrptr.check_event(vals)
+
             else:
                 if self.armed:
                     self.kybd_state_mngr.run(event_info)
-                    left_js, right_js = self.kybd_state_mngr.get_js()
-                    states = self.kybd_state_mngr.get_states()
+                    commands = self.kybd_state_mngr.get_commands()
+                    for command in commands:
+                        self.controls.get_outcome(command)
 
-                    left_js_action = self.kybd_mppng.get_action(left_js)
-                    right_js_action = self.kybd_mppng.get_action(right_js)
-                    self.controls.reset(states)
-
-                    if left_js_action is not None:
-                        self.controls.get_outcome(left_js_action)
-
-                    if right_js_action is not None:
-                        self.controls.get_outcome(right_js_action)
-
-                    self.send_ser_comm_command()
-
-                    vals = self.controls.get_values()
-                    self.pstwrttn_scrptr.check_event(vals)
+                    reset_states = self.kybd_state_mngr.get_reset_states()
+                    self.controls.reset(reset_states)
 
     def gmpd_control(self):
         """Handles functions associated with using a gamepad as an input device."""

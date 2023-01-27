@@ -1,159 +1,161 @@
 from utils import create_folder, list_files, printer, string_stripper, write_file
 
 
-class PrewrittenScripter:
-    """This writes commands that will be executed by a DroneControls object.
+class PrewrittenScripter
 
-    'Pre' in PrewrittenScripter means written before the commands are executed.
-    Format of commands script is:
-        # example.txt
-        THROTTLE_DECR 24
-        YAW_INCR PITCH_INCR 30
-        ROLL_INCR 23
+# class PrewrittenScripter:
+#     """This writes commands that will be executed by a DroneControls object.
 
-    NB: A command can has one or two command types. When two, it means both left and right joysticks have been pressed
-    simultaneously. The number at the end is the number of times it should run for.
+#     'Pre' in PrewrittenScripter means written before the commands are executed.
+#     Format of commands script is:
+#         # example.txt
+#         THROTTLE_DECR 24
+#         YAW_INCR PITCH_INCR 30
+#         ROLL_INCR 23
 
-    Attributes:
-        *script: A list of the commands that are being executed by a DroneControl object.
-    """
+#     NB: A command can has one or two command types. When two, it means both left and right joysticks have been pressed
+#     simultaneously. The number at the end is the number of times it should run for.
 
-    SCRIPTING_ROOT_PATH = "scriptings/prewritten"
-    LEFT_JS = "THROTTLE", "YAW"
-    RIGHT_JS = "PITCH", "ROLL"
-    ACTIONS = {
-        0: "THROTTLE_INCR",
-        1: "THROTTLE_DECR",
-        2: "YAW_DECR",
-        3: "YAW_INCR",
-        4: "PITCH_INCR",
-        5: "PITCH_DECR",
-        6: "ROLL_DECR",
-        7: "ROLL_INCR",
-    }
-    STRIP_LIST = "_INCR", "_DECR"
+#     Attributes:
+#         *script: A list of the commands that are being executed by a DroneControl object.
+#     """
 
-    def __init__(self) -> None:
-        self.check_default_path()
-        self.script = []
+#     SCRIPTING_ROOT_PATH = "scriptings/prewritten"
+#     LEFT_JS = "THROTTLE", "YAW"
+#     RIGHT_JS = "PITCH", "ROLL"
+#     ACTIONS = {
+#         0: "THROTTLE_INCR",
+#         1: "THROTTLE_DECR",
+#         2: "YAW_DECR",
+#         3: "YAW_INCR",
+#         4: "PITCH_INCR",
+#         5: "PITCH_DECR",
+#         6: "ROLL_DECR",
+#         7: "ROLL_INCR",
+#     }
+#     STRIP_LIST = "_INCR", "_DECR"
 
-    def list_scripts(self):
-        """List filenames that are in prewritten scripts folder."""
+#     def __init__(self) -> None:
+#         self.check_default_path()
+#         self.script = []
 
-        return list_files(self.SCRIPTING_ROOT_PATH)
+#     def list_scripts(self):
+#         """List filenames that are in prewritten scripts folder."""
 
-    def check_default_path(self):
-        """Checks if path to which scripts (.txt) files are to be saved exists."""
+#         return list_files(self.SCRIPTING_ROOT_PATH)
 
-        create_folder(self.SCRIPTING_ROOT_PATH)
+#     def check_default_path(self):
+#         """Checks if path to which scripts (.txt) files are to be saved exists."""
 
-    def script_formatter(self, actions: str, intensity: str) -> str:
-        """Parses the command types('actions') and magnitude('intensity') to a string to be added to the script.
+#         create_folder(self.SCRIPTING_ROOT_PATH)
 
-        Args:
-            *actions: A number or numbers in form of a str for commands type(s).
-            *intensity: A number in form of a str for the magnitude associated the 'actions'.
+#     def script_formatter(self, actions: str, intensity: str) -> str:
+#         """Parses the command types('actions') and magnitude('intensity') to a string to be added to the script.
 
-        Returns:
-            A str in the format of:
-                THROTTLE_DECR 24
-                YAW_INCR PITCH_INCR 30
-            to added to the list of commands being recorded.
-        """
+#         Args:
+#             *actions: A number or numbers in form of a str for commands type(s).
+#             *intensity: A number in form of a str for the magnitude associated the 'actions'.
 
-        # Change to integers
-        action_nums = tuple(int(i) for i in actions.split())
-        intensity_num = int(intensity)
+#         Returns:
+#             A str in the format of:
+#                 THROTTLE_DECR 24
+#                 YAW_INCR PITCH_INCR 30
+#             to added to the list of commands being recorded.
+#         """
 
-        # Get the actions associated
-        action_list = [self.ACTIONS[a] for a in action_nums]
-        len_action_list = len(action_list)
+#         # Change to integers
+#         action_nums = tuple(int(i) for i in actions.split())
+#         intensity_num = int(intensity)
 
-        script_line = []
+#         # Get the actions associated
+#         action_list = [self.ACTIONS[a] for a in action_nums]
+#         len_action_list = len(action_list)
 
-        if len_action_list == 1:  # Single command
-            script_line.append(action_list[0])
-        elif len_action_list == 2:  # Simultaneous commands
-            validity = self.action_validator(action_list)
-            if validity:
-                for i in range(len_action_list):
-                    script_line.append(action_list[i])
+#         script_line = []
 
-        script_line.append(intensity_num)
+#         if len_action_list == 1:  # Single command
+#             script_line.append(action_list[0])
+#         elif len_action_list == 2:  # Simultaneous commands
+#             validity = self.action_validator(action_list)
+#             if validity:
+#                 for i in range(len_action_list):
+#                     script_line.append(action_list[i])
 
-        if len_action_list > 2:
-            raise Exception("Invalid number of inputs.")
+#         script_line.append(intensity_num)
 
-        script_line = [str(s) for s in script_line]
-        script_line = " ".join(script_line)
-        script_line += "\n"
+#         if len_action_list > 2:
+#             raise Exception("Invalid number of inputs.")
 
-        return script_line
+#         script_line = [str(s) for s in script_line]
+#         script_line = " ".join(script_line)
+#         script_line += "\n"
 
-    def action_validator(self, action_list: tuple) -> bool:
-        """Validates actions entered (when actions entered are two) belong to separate joysticks
+#         return script_line
 
-        Args:
-            *action_list: A tuple conataining actions being checked for validity.
-        """
+#     def action_validator(self, action_list: tuple) -> bool:
+#         """Validates actions entered (when actions entered are two) belong to separate joysticks
 
-        action_list_stripped = (
-            string_stripper(a, self.STRIP_LIST) for a in action_list
-        )
-        action_js = ["l" if a in self.LEFT_JS else "r" for a in action_list_stripped]
+#         Args:
+#             *action_list: A tuple conataining actions being checked for validity.
+#         """
 
-        return action_js[0] != action_js[1]
+#         action_list_stripped = (
+#             string_stripper(a, self.STRIP_LIST) for a in action_list
+#         )
+#         action_js = ["l" if a in self.LEFT_JS else "r" for a in action_list_stripped]
 
-    def prewritten_script_input(self):
-        """Records user input for commands to be prewritten.
+#         return action_js[0] != action_js[1]
 
-        Command types will be entered using numbers using
-            ACTIONS = {
-                0: "THROTTLE_INCR", 1: "THROTTLE_DECR",
-                2: "YAW_DECR", 3: "YAW_INCR",
-                4: "PITCH_INCR", 5: "PITCH_DECR",
-                6: "ROLL_DECR", 7: "ROLL_INCR"
-            }
-        Commands associated with joysticks:
-            LEFT_JS = "THROTTLE", "YAW"
-            RIGHT_JS = "PITCH", "ROLL"
+#     def prewritten_script_input(self):
+#         """Records user input for commands to be prewritten.
 
-        NB: To enter command types with left and right joysticks,
-        enter number in left and right joystick commands to run.
-        """
+#         Command types will be entered using numbers using
+#             ACTIONS = {
+#                 0: "THROTTLE_INCR", 1: "THROTTLE_DECR",
+#                 2: "YAW_DECR", 3: "YAW_INCR",
+#                 4: "PITCH_INCR", 5: "PITCH_DECR",
+#                 6: "ROLL_DECR", 7: "ROLL_INCR"
+#             }
+#         Commands associated with joysticks:
+#             LEFT_JS = "THROTTLE", "YAW"
+#             RIGHT_JS = "PITCH", "ROLL"
 
-        printer(f"Actions: {self.ACTIONS}")
+#         NB: To enter command types with left and right joysticks,
+#         enter number in left and right joystick commands to run.
+#         """
 
-        while True:
-            actions = input(
-                "Enter number(s) (associated with action(s), 'q' to quit): "
-            )
-            if actions == "q":
-                break
+#         printer(f"Actions: {self.ACTIONS}")
 
-            intensity = input("Enter intensity: ")
-            script_line = self.script_formatter(actions, intensity)
-            if script_line:
-                self.script.append(script_line)
+#         while True:
+#             actions = input(
+#                 "Enter number(s) (associated with action(s), 'q' to quit): "
+#             )
+#             if actions == "q":
+#                 break
 
-    def prewritten_script_writer(self):
-        """Saves script currently recorded into a .txt file."""
+#             intensity = input("Enter intensity: ")
+#             script_line = self.script_formatter(actions, intensity)
+#             if script_line:
+#                 self.script.append(script_line)
 
-        self.script = []
+#     def prewritten_script_writer(self):
+#         """Saves script currently recorded into a .txt file."""
 
-        print("----------------------------")
-        self.prewritten_script_input()
+#         self.script = []
 
-        if self.script:
-            printer(f"Scripts: {self.list_scripts()}")
-            filename = input("Enter filename: ")
+#         print("----------------------------")
+#         self.prewritten_script_input()
 
-            write_file(
-                folder_path=self.SCRIPTING_ROOT_PATH,
-                file_contents=self.script,
-                filename=filename,
-            )
-        print("----------------------------")
+#         if self.script:
+#             printer(f"Scripts: {self.list_scripts()}")
+#             filename = input("Enter filename: ")
+
+#             write_file(
+#                 folder_path=self.SCRIPTING_ROOT_PATH,
+#                 file_contents=self.script,
+#                 filename=filename,
+#             )
+#         print("----------------------------")
         
 
 
