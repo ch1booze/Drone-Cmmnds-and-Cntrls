@@ -18,26 +18,26 @@ class DroneController:
     """This combines both gamepad and keyboard devices as inputs to be used as controller to a drone.
 
     Attributes:
-        *controls: A DroneControls object.
+        - controls: A DroneControls object.
 
         Gamepad:
-            *gmpd_inpttr: A GamepadInputter object.
-            *gmpd_mppng: A Mapping object set with a dict with gamepad related commands.
-            *gmpd_state_mngr: A StateManager set with a dict for managing gamepad states
+            - gmpd_inpttr: A GamepadInputter object.
+            - gmpd_mppng: A Mapping object set with a dict with gamepad related commands.
+            - gmpd_state_mngr: A StateManager set with a dict for managing gamepad states
 
         Keyboard:
-            *kybd_inpttr: A KeyboardInputter object.
-            *kybd_mppng: A Mapping object set with a dict with keyboard related commands.
-            *kybd_state_mngr: A StateManager set with a dict for managing keyboard states
+            - kybd_inpttr: A KeyboardInputter object.
+            - kybd_mppng: A Mapping object set with a dict with keyboard related commands.
+            - kybd_state_mngr: A StateManager set with a dict for managing keyboard states
 
         Script:
-            *prewrttn_scrptr:
-            *pstwrttn_scrptr
-            *scrpt_file_rdr
+            - prewrttn_scrptr:
+            - pstwrttn_scrptr
+            - scrpt_file_rdr
 
-        *armed: A bool monitoring whether the drone is armed or not.
-        *input_device: Monitors the device from which events are read from.
-        *exit: A bool that when True ends the DroneController execution.
+        - armed: A bool monitoring whether the drone is armed or not.
+        - input_device: Monitors the device from which events are read from.
+        - exit: A bool that when True ends the DroneController execution.
     """
 
     DEVICES = "KYBD", "GMPD"
@@ -163,27 +163,6 @@ class DroneController:
                 self.exit = True
 
             # NORMAL COMMANDS
-            # else:
-            #     if self.armed:
-            #         self.kybd_state_mngr.run(event_info)
-            #         left_js, right_js = self.kybd_state_mngr.get_js()
-            #         states = self.kybd_state_mngr.get_states()
-
-            #         left_js_action = self.kybd_mppng.get_action(left_js)
-            #         right_js_action = self.kybd_mppng.get_action(right_js)
-            #         self.controls.reset(states)
-
-            #         if left_js_action is not None:
-            #             self.controls.get_outcome(left_js_action)
-
-            #         if right_js_action is not None:
-            #             self.controls.get_outcome(right_js_action)
-
-            #         self.send_ser_comm_command()
-
-            #         vals = self.controls.get_values()
-            #         self.pstwrttn_scrptr.check_event(vals)
-
             else:
                 if self.armed:
                     self.kybd_state_mngr.run(event_info)
@@ -193,6 +172,10 @@ class DroneController:
 
                     reset_states = self.kybd_state_mngr.get_reset_states()
                     self.controls.reset(reset_states)
+
+                    #         self.send_ser_comm_command()
+
+                    self.pstwrttn_scrptr.check_commands(commands)
 
     def gmpd_control(self):
         """Handles functions associated with using a gamepad as an input device."""
@@ -208,24 +191,17 @@ class DroneController:
 
             else:
                 if self.armed:
-                    self.gmpd_state_mngr.run()
-                    left_js, right_js = self.kybd_state_mngr.get_js()
-                    states = self.kybd_state_mngr.get_states()
+                    self.kybd_state_mngr.run(event_info)
+                    commands = self.kybd_state_mngr.get_commands()
+                    for command in commands:
+                        self.controls.get_outcome(command)
 
-                    left_js_action = self.kybd_mppng.get_action(left_js)
-                    right_js_action = self.kybd_mppng.get_action(right_js)
-                    self.controls.reset(states)
+                    reset_states = self.kybd_state_mngr.get_reset_states()
+                    self.controls.reset(reset_states)
 
-                    if left_js_action:
-                        self.controls.get_outcome(left_js_action)
+                    #         self.send_ser_comm_command()
 
-                    if right_js_action:
-                        self.controls.get_outcome(right_js_action)
-
-                    self.send_ser_comm_command()
-
-                    vals = self.controls.get_values()
-                    self.pstwrttn_scrptr.check_event(vals)
+                    self.pstwrttn_scrptr.check_commands(commands)
 
     def kybd_help(self):
         """List all instructions for how to use keyboard as input device."""
