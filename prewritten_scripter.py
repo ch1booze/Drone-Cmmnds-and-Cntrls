@@ -1,7 +1,7 @@
 from utils import create_folder, list_files, printer, string_stripper, write_file
 
 
-class PrewrittenScripter
+# class PrewrittenScripter
 
 # class PrewrittenScripter:
 #     """This writes commands that will be executed by a DroneControls object.
