@@ -38,7 +38,7 @@ class KeyboardInputter(Inputter):
         Returns:
             A dict that takes the form:
                 {
-                    "key": "<key input from gamepad>",
+                    "key": "<key input from keyboard>",
                     "type": <whether or not the event was a press or release>
                 }
         """

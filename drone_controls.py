@@ -2,13 +2,13 @@ from base_control import BaseControl
 
 
 class DroneControls:
-    """"This represents a drone controller with the four controls i.e. throttle, yaw, pitch, and roll.
-    
+    """ "This represents a drone controller with the four controls i.e. throttle, yaw, pitch, and roll.
+
     Attributes:
         *throttle, yaw, pitch, roll: BaseControl objects that represent controls on a drone controller.
         *outcomes: A dict of commands with their associated functions.
     """
-    
+
     MAGNITUDE = 200
     RATE_OF_CHANGE = 1
 
@@ -47,12 +47,12 @@ class DroneControls:
         if action:
             self.outcomes.get(action)()
 
-    def reset(self, states):
-        if not states["THROTTLE"]:
+    def reset(self, reset_states):
+        if reset_states["THROTTLE"]:
             self.throttle.reset_value()
-        if not states["YAW"]:        
+        if reset_states["YAW"]:
             self.yaw.reset_value()
-        if not states["PITCH"]:
+        if reset_states["PITCH"]:
             self.pitch.reset_value()
-        if not states["ROLL"]:
+        if reset_states["ROLL"]:
             self.roll.reset_value()
