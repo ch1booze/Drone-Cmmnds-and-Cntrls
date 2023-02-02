@@ -14,7 +14,7 @@ class SerialComm:
 
     def set_Arduino(self):
         if self.com_port:
-            self.Arduino = serial.Serial(self.com_port, self.baud_rate)
+            self.Arduino = serial.Serial(self.com_port, self.baud_rate, timeout=1)
             print("Arduino found!")
 
     def get_Arduino_port(self):
