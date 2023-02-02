@@ -44,7 +44,7 @@ class DroneController:
 
     def __init__(self) -> None:
         self.controls = DroneControls()
-        # self.ser_comm = SerialComm()
+        self.ser_comm = SerialComm()
 
         # Keybaord related classes
         self.kybd_inpttr = KeyboardInputter()
@@ -173,7 +173,7 @@ class DroneController:
                     reset_states = self.kybd_state_mngr.get_reset_states()
                     self.controls.reset(reset_states)
 
-                    #         self.send_ser_comm_command()
+                    self.send_ser_comm_command()
 
                     self.pstwrttn_scrptr.check_commands(commands)
 
@@ -199,7 +199,7 @@ class DroneController:
                     reset_states = self.kybd_state_mngr.get_reset_states()
                     self.controls.reset(reset_states)
 
-                    #         self.send_ser_comm_command()
+                    self.send_ser_comm_command()
 
                     self.pstwrttn_scrptr.check_commands(commands)
 
