@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import time
 
 EVENT_TYPES = "PRSS", "RLSE"  # Press and Release
 
@@ -24,6 +25,7 @@ class Inputter(ABC):
 
     def run_event(self):
         """Read event data via 'read_event' and resolves event data  into information using 'resolve_event'."""
+
         event_data = self.read_event()
         event_info = self.resolve_event(event_data)
 

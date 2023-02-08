@@ -1,4 +1,5 @@
 import time
+from main import DroneController
 
 import serial
 import serial.tools.list_ports
@@ -8,13 +9,15 @@ class SerialComm:
     def __init__(self) -> None:
         self.com_port = ""
         self.get_Arduino_port()
-        self.baud_rate = 115200
+        self.baud_rate = 9600
         self.Arduino = None
         self.set_Arduino()
 
     def set_Arduino(self):
         if self.com_port:
-            self.Arduino = serial.Serial(self.com_port, self.baud_rate, timeout=1)
+            self.Arduino = serial.Serial(
+                self.com_port, self.baud_rate, write_timeout=0.01
+            )
             print("Arduino found!")
 
     def get_Arduino_port(self):
@@ -33,31 +36,19 @@ class SerialComm:
         else:
             print("Arduino not found!")
 
-    def send_Arduino_data(self, data: str) -> None:
-        cmd_str = f"{data}\r"
-        print(cmd_str)
-        self.Arduino.write(cmd_str.encode())
-        time.sleep(1)
-
 
 if __name__ == "__main__":
-    from random import randint
-
+    cntrllr = DroneController()
     s = SerialComm()
-    while True:
-        for i in range(15):
-            cmd = ""
-            for _ in range(4):
-                # cmd += str(randint(0, 400)).zfill(3)
-                if i < 3:
-                    cmd += "100"
-                elif i < 6:
-                    cmd += "200"
-                elif i < 9:
-                    cmd += "300"
-                else:
-                    cmd += "400"
 
-            s.send_Arduino_data(cmd)
+    while not cntrllr.exit:
+        vals = cntrllr.run_event()
+        comm_str = ""
+        comm_list = [i + 200 for i in vals.values()]
+        data_bytes = bytes(comm_list)
 
-        break
+        print(comm_list)
+
+        s.Arduino.write(data_bytes)
+        time.sleep(0.1)
+        s.Arduino.flush()

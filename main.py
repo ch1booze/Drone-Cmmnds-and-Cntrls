@@ -9,7 +9,7 @@ from mapping import Mapping
 from postwritten_scripter import PostwrittenScripter
 from prewritten_scripter import PrewrittenScripter
 from script_file_reader import ScriptFileReader
-from serial_comm import SerialComm
+# from serial_comm import SerialComm
 from state_manager import StateManager
 from utils import printer
 
@@ -44,7 +44,7 @@ class DroneController:
 
     def __init__(self) -> None:
         self.controls = DroneControls()
-        self.ser_comm = SerialComm()
+        # self.ser_comm = SerialComm()
 
         # Keybaord related classes
         self.kybd_inpttr = KeyboardInputter()
@@ -110,9 +110,12 @@ class DroneController:
         elif self.input_device == self.DEVICES[1]:
             self.gmpd_control()
 
+        return self.controls.get_values()
+
     def run(self):
         while not self.exit:
-            self.run_event()
+            values = self.run_event()
+            print(values)
 
     def kybd_control(self):
         """Handles functions associated with using the keyboard as an input device.
@@ -173,7 +176,7 @@ class DroneController:
                     reset_states = self.kybd_state_mngr.get_reset_states()
                     self.controls.reset(reset_states)
 
-                    self.send_ser_comm_command()
+                    # self.send_ser_comm_command()
 
                     self.pstwrttn_scrptr.check_commands(commands)
 
@@ -199,7 +202,7 @@ class DroneController:
                     reset_states = self.kybd_state_mngr.get_reset_states()
                     self.controls.reset(reset_states)
 
-                    self.send_ser_comm_command()
+                    # self.send_ser_comm_command()
 
                     self.pstwrttn_scrptr.check_commands(commands)
 
@@ -225,14 +228,14 @@ Shortcut information:
         )
         print("----------------------------")
 
-    def send_ser_comm_command(self):
-        vals = self.controls.get_values()
-        comm_str = ""
-        for i in vals.values():
-            c = i + 200
-            comm_str += str(c).zfill(3)
+    # def send_ser_comm_command(self):
+    #     vals = self.controls.get_values()
+    #     comm_str = ""
+    #     for i in vals.values():
+    #         c = i + 200
+    #         comm_str += str(c).zfill(3)
 
-        self.ser_comm.send_Arduino_data(comm_str)
+    #     self.ser_comm.send_Arduino_data(comm_str)
 
     def gmpd_help(self):
         """List all the instructions for how to use gamepad as input device."""

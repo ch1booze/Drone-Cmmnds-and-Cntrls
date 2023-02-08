@@ -1,6 +1,8 @@
+import time
+
 from pynput import keyboard
 
-from inputter import Inputter, EVENT_TYPES
+from inputter import EVENT_TYPES, Inputter
 from utils import string_stripper
 
 
@@ -25,7 +27,9 @@ class KeyboardInputter(Inputter):
             A pynput.keyboard.Press | Release object.
         """
 
-        event_data = self.event_catcher.get()
+        time.sleep(0.05)
+        event_data = self.event_catcher.get(timeout=0.01)
+            
         return event_data
 
     def resolve_event(self, event_data) -> dict:
@@ -71,15 +75,18 @@ class KeyboardInputter(Inputter):
             return key_combo_str
 
         event_type = None
-        key = get_key(event_data)
+        key = None
 
-        if COMBINATION_KEY in key:
-            key = key_combo(key)
+        if event_data is not None:
+            key = get_key(event_data)
 
-        if type(event_data) == PRESS:
-            event_type = EVENT_TYPES[0]
-        elif type(event_data) == RELEASE:
-            event_type = EVENT_TYPES[1]
+            if COMBINATION_KEY in key:
+                key = key_combo(key)
+
+            if type(event_data) == PRESS:
+                event_type = EVENT_TYPES[0]
+            elif type(event_data) == RELEASE:
+                event_type = EVENT_TYPES[1]
 
         event_info = {"type": event_type, "key": key}
         return event_info
