@@ -1,8 +1,9 @@
 import time
-from main import DroneController
 
 import serial
 import serial.tools.list_ports
+
+from drone_controller import DroneController
 
 
 class SerialComm:
