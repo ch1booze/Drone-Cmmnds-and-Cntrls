@@ -45,7 +45,7 @@ if __name__ == "__main__":
     while not cntrllr.exit:
         vals = cntrllr.run_event()
         comm_str = ""
-        comm_list = [i + 200 for i in vals.values()]
+        comm_list = [i + 127 for i in vals.values()]
         data_bytes = bytes(comm_list)
 
         print(comm_list)

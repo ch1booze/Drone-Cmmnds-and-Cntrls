@@ -9,7 +9,7 @@ class DroneControls:
         *outcomes: A dict of commands with their associated functions.
     """
 
-    MAGNITUDE = 200
+    MAGNITUDE = 127
     RATE_OF_CHANGE = 1
 
     def __init__(self) -> None:
